@@ -83,6 +83,10 @@ export USER1_COOKIE_JWT=$(curl -Ssm 10 --fail-with-body \
   "$KEYCLOAK_URL/realms/workshop/protocol/openid-connect/token" |
   jq -r .access_token)
 
+#Decode JWT
+
+jq -R 'split(".") | .[1] | @base64d | fromjson' <<< "$USER1_COOKIE_JWT"
+
 curl -k https://httpbin.cluster1.${_SANDBOX_ID}.instruqt.io/get -H "jwt: ${USER1_COOKIE_JWT}"
 
 #####
@@ -149,6 +153,10 @@ export USER2_COOKIE_JWT=$(curl -Ssm 10 --fail-with-body \
   -d "grant_type=password" \
   "$KEYCLOAK_URL/realms/workshop/protocol/openid-connect/token" |
   jq -r .access_token)
+
+#Decode JWT
+
+jq -R 'split(".") | .[1] | @base64d | fromjson' <<< "$USER1_COOKIE_JWT"
 
 #User 2 access denied
 
